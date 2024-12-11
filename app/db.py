@@ -1,10 +1,10 @@
-from config import get_db_config
+from .config import get_db_config
+from pathlib import Path
 import pymysql.cursors
 import os
 
 
-SCHEMA_SQL_FILE = os.path.join(
-    os.path.dirname(__file__), 'sql', 'schema.sql')
+SCHEMA_SQL_FILE = Path(__file__).parent.parent / 'sql' / 'schema.sql'
 
 
 def get_connection():

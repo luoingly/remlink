@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
+from pathlib import Path
 import pymysql.cursors
 import os
 
+ENV_FILEPATH = Path(__file__).parent.parent / '.env'
 
 DEFAULT_DB_CONFIG = {
     'host': 'localhost',
@@ -13,8 +15,8 @@ DEFAULT_DB_CONFIG = {
 
 
 def get_db_config():
-    if os.path.exists('.env'):
-        load_dotenv()
+    if ENV_FILEPATH.exists():
+        load_dotenv(ENV_FILEPATH)
 
     config = DEFAULT_DB_CONFIG.copy()
     config['host'] = os.getenv('DB_HOST', config['host'])
