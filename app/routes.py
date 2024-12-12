@@ -43,6 +43,29 @@ def register_post():
             username_regex=USERNAME_REGEX, password_regex=PASSWORD_REGEX)
 
 
+@blueprint.route('/login', methods=['GET'])
+def login_get():
+    if session.get('user_id'):
+        return redirect('/')
+    return render_template('login.html')
+
+
+@blueprint.route('/login', methods=['POST'])
+def login_post():
+    if session.get('user_id'):
+        return redirect('/')
+
+    username = request.form['username']
+    password = request.form['password']
+
+    try:
+        user = UserService.login(username, password)
+        session.update({'user_id': user.user_id, 'username': user.username})
+        return redirect('/')
+    except Exception as e:
+        return render_template('login.html', error=str(e))
+
+
 @blueprint.route('/logout', methods=['GET'])
 def logout():
     session.clear()

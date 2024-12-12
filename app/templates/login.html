@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}账号登录{% endblock %}
+{% block style %}
+<style>
+    .login {
+        max-width: 448px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="mdui-typo mdui-p-t-4 mdui-p-b-2">
+    <h1>账号登录</h1>
+    <hr />
+</div>
+{% if error %}
+<div class="mdui-chip">
+    <span class="mdui-chip-icon mdui-color-red">
+        <i class="mdui-icon material-icons">error_outline</i>
+    </span>
+    <span class="mdui-chip-title">{{ error }}</span>
+</div>
+{% endif %}
+<form method="POST" action="/login" class="login">
+    <div class="mdui-textfield">
+        <i class="mdui-icon material-icons">account_circle</i>
+        <label class="mdui-textfield-label">用户名</label>
+        <input class="mdui-textfield-input" type="text" maxlength="20" name="username" required />
+        <div class="mdui-textfield-helper">请输入用户名</div>
+    </div>
+    <div class="mdui-textfield">
+        <i class="mdui-icon material-icons">lock</i>
+        <label class="mdui-textfield-label">密码</label>
+        <input class="mdui-textfield-input" type="password" maxlength="20" name="password" required />
+        <div class="mdui-textfield-helper">请输入密码</div>
+    </div>
+    <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-btn-block mdui-m-t-4" type="submit">登录</button>
+    <a href="/register" class="mdui-btn mdui-ripple mdui-btn-block mdui-m-y-2">注册</a>
+</form>
+{% endblock %}

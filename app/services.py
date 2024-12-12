@@ -30,12 +30,12 @@ class UserService:
 
     @staticmethod
     def register(username: str, password: str) -> User:
-        assert re.match(USERNAME_REGEX, username), \
-            "用户名必须由 4-20 位字母、数字或下划线组成。"
-        assert re.match(PASSWORD_REGEX, password), \
-            "密码必须包含大小写字母、数字和特殊字符，长度为 8-20 位。"
-        assert UserService._get_user_by_username(username) is None, \
-            "用户名已存在，换一个试试吧。"
+        if not re.match(USERNAME_REGEX, username):
+            raise ValueError("用户名必须由 4-20 位字母、数字或下划线组成。")
+        if not re.match(PASSWORD_REGEX, password):
+            raise ValueError("密码必须包含大小写字母、数字和特殊字符，长度为 8-20 位。")
+        if UserService._get_user_by_username(username) is not None:
+            raise ValueError("用户名已存在，换一个试试吧。")
 
         connection = get_connection()
         query = \
@@ -54,3 +54,18 @@ class UserService:
             raise DatabaseError("注册失败") from e
         finally:
             connection.close()
+
+    @staticmethod
+    def login(username: str, password: str) -> User:
+        MISMATCH_ERROR = "用户名或密码错误。"
+
+        if not re.match(USERNAME_REGEX, username):
+            raise ValueError(MISMATCH_ERROR)
+        if not re.match(PASSWORD_REGEX, password):
+            raise ValueError(MISMATCH_ERROR)
+
+        user = UserService._get_user_by_username(username)
+        if not user or not check_password(password, user.password):
+            raise ValueError(MISMATCH_ERROR)
+
+        return user
