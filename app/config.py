@@ -1,16 +1,20 @@
+import os
+
 from dotenv import load_dotenv
 from pathlib import Path
-import pymysql.cursors
-import os
+
 
 ENV_FILEPATH = Path(__file__).parent.parent / '.env'
 
 DEFAULT_DB_CONFIG = {
+    'maxconnections': 10,
+    'mincached': 2,
+    'blocking': True,
     'host': 'localhost',
     'user': 'root',
-    'password': 'yourpassword',
+    'password': '',
     'database': 'remlink',
-    'cursorclass': pymysql.cursors.DictCursor
+    'charset': 'utf8'
 }
 
 
