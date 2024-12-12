@@ -4,7 +4,7 @@ from pymysql.cursors import DictCursor
 
 from .utils import hash_password, check_password
 from .db import get_connection, DatabaseError
-from .models import User, Post, Privacy
+from .models import User, Post, Privacy, Profile
 
 USERNAME_REGEX = r'^[a-zA-Z0-9_]{4,20}$'
 PASSWORD_REGEX = \
@@ -71,6 +71,24 @@ class UserService:
             raise ValueError(MISMATCH_ERROR)
 
         return user
+    
+    @staticmethod
+    def get_profile(user_id: int) -> Profile:
+        connection = get_connection()
+        query = "SELECT * FROM users_view WHERE user_id = %s"
+        params = (user_id,)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+                profile = cursor.fetchone()
+            if not profile:
+                raise ValueError("用户不存在。")
+            return Profile(**profile)
+        except Exception as e:
+            raise DatabaseError("获取用户信息失败") from e
+        finally:
+            connection.close()
 
 
 class PostService:

@@ -40,3 +40,15 @@ class Post:
 
     def __repr__(self):
         return f'<Post {self.post_id}>'
+
+
+class Profile:
+
+    def __init__(self, user_id: int, username: str, bio: str | None = None,
+                 follower_count: int = 0, followee_count: int = 0):
+        self.user_id = user_id
+        self.username = username
+        self.bio = bio
+        self.follower_count = follower_count
+        self.followee_count = followee_count
+        
