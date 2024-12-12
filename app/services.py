@@ -19,10 +19,11 @@ class UserService:
 
         connection = get_connection()
         query = "SELECT * FROM users WHERE username = %s"
+        params = (username,)
 
         try:
             with connection.cursor(DictCursor) as cursor:
-                cursor.execute(query, (username,))
+                cursor.execute(query, params)
                 user = cursor.fetchone()
             return User(**user) if user else None
         finally:
@@ -42,10 +43,11 @@ class UserService:
             "INSERT INTO users (username, password) " \
             "VALUES (%s, %s) " \
             "RETURNING *"
+        params = (username, hash_password(password))
 
         try:
             with connection.cursor(DictCursor) as cursor:
-                cursor.execute(query, (username, hash_password(password)))
+                cursor.execute(query, params)
                 user = cursor.fetchone()
             connection.commit()
             return User(**user)
