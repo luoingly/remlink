@@ -4,7 +4,7 @@ from pymysql.cursors import DictCursor
 
 from .utils import hash_password, check_password
 from .db import get_connection, DatabaseError
-from .model import User
+from .models import User, Post
 
 USERNAME_REGEX = r'^[a-zA-Z0-9_]{4,20}$'
 PASSWORD_REGEX = \
@@ -71,3 +71,23 @@ class UserService:
             raise ValueError(MISMATCH_ERROR)
 
         return user
+
+
+class PostService:
+
+    @staticmethod
+    def get_posts(user_id: int | None = None, target_user_id: int | None = None,
+                  offset: int = 0, limit: int = 10) -> list[Post]:
+        connection = get_connection()
+        query = "CALL get_visible_posts(%s, %s, %s, %s);"
+        params = (user_id, target_user_id, offset, limit)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+                posts = cursor.fetchall()
+            return [Post(**post) for post in posts]
+        except Exception as e:
+            raise DatabaseError("获取动态失败") from e
+        finally:
+            connection.close()

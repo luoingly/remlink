@@ -9,6 +9,8 @@ from .config import get_db_config
 
 
 SCHEMA_SQL_FILE = Path(__file__).parent.parent / 'sql' / 'schema.sql'
+VIEW_SQL_FILE = Path(__file__).parent.parent / 'sql' / 'view.sql'
+PROCEDURE_SQL_FILE = Path(__file__).parent.parent / 'sql' / 'procedure.sql'
 
 
 pool = None
@@ -33,11 +35,12 @@ def get_connection() -> Connection:
 
 def init_db():
 
-    assert SCHEMA_SQL_FILE.exists(), \
-        f"SQL file not found: {SCHEMA_SQL_FILE}"
-
-    with open(SCHEMA_SQL_FILE, 'rt', encoding='utf-8') as f:
-        queries = [query for query in f.read().split(';') if query.strip()]
+    queries = []
+    for file in [SCHEMA_SQL_FILE, VIEW_SQL_FILE, PROCEDURE_SQL_FILE]:
+        assert file.exists(), f"SQL file not exists: {file}"
+        with open(file, 'rt', encoding='utf-8') as f:
+            queries.extend(
+                [query for query in f.read().split('\n\n\n') if query.strip()])
 
     connection = get_connection()
     with connection.cursor(DictCursor) as cursor:
