@@ -38,7 +38,7 @@ def get_secret_key() -> str:
     return os.getenv('SECRET_KEY', token_urlsafe(16))
 
 
-def debug_enabled() -> bool:
+def is_debug_enabled() -> bool:
     return os.getenv('DEBUG', 'False').lower() == 'true'
 
 

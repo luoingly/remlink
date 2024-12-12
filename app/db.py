@@ -36,7 +36,7 @@ def init_db():
     assert SCHEMA_SQL_FILE.exists(), \
         f"SQL file not found: {SCHEMA_SQL_FILE}"
 
-    with open(SCHEMA_SQL_FILE, 'rt') as f:
+    with open(SCHEMA_SQL_FILE, 'rt', encoding='utf-8') as f:
         queries = [query for query in f.read().split(';') if query.strip()]
 
     connection = get_connection()
