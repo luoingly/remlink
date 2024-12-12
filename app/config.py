@@ -1,5 +1,6 @@
 import os
 
+from secrets import token_urlsafe
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -18,9 +19,11 @@ DEFAULT_DB_CONFIG = {
 }
 
 
-def get_db_config():
-    if ENV_FILEPATH.exists():
-        load_dotenv(ENV_FILEPATH)
+if ENV_FILEPATH.exists():
+    load_dotenv(ENV_FILEPATH)
+
+
+def get_db_config() -> dict:
 
     config = DEFAULT_DB_CONFIG.copy()
     config['host'] = os.getenv('DB_HOST', config['host'])
@@ -29,6 +32,14 @@ def get_db_config():
     config['database'] = os.getenv('DB_DATABASE', config['database'])
 
     return config
+
+
+def get_secret_key() -> str:
+    return os.getenv('SECRET_KEY', token_urlsafe(16))
+
+
+def debug_enabled() -> bool:
+    return os.getenv('DEBUG', 'False').lower() == 'true'
 
 
 if __name__ == '__main__':

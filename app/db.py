@@ -3,14 +3,20 @@ import pymysql
 from pymysql.connections import Connection
 from pymysql.cursors import DictCursor
 from dbutils.pooled_db import PooledDB
-from .config import get_db_config
 from pathlib import Path
+
+from .config import get_db_config
 
 
 SCHEMA_SQL_FILE = Path(__file__).parent.parent / 'sql' / 'schema.sql'
 
 
 pool = None
+
+
+class DatabaseError(Exception):
+    def __init__(self, message: str):
+        super().__init__(f"数据库错误，{message}。")
 
 
 def init_pool():

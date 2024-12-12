@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mdui.min.css') }}">
+    <title>{%block title%}你好{%endblock%} - Remlink</title>
+    <style>
+        .mdui-container {
+            max-width: 800px;
+        }
+    </style>
+    {% block style %}{% endblock %}
+</head>
+
+<body class="mdui-theme-primary-blue mdui-theme-accent-blue">
+    {% include 'header.html' %}
+    <div class="mdui-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/mdui.min.js') }}"></script>
+    {% block script %}{% endblock %}
+</body>
+
+</html>

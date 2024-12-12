@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}注册账号{% endblock %}
+{% block style %}
+<style>
+    .register {
+        max-width: 448px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="mdui-typo mdui-p-t-4 mdui-p-b-2">
+    <h1>注册账号</h1>
+    <hr />
+</div>
+{% if error %}
+<div class="mdui-chip">
+    <span class="mdui-chip-icon mdui-color-red">
+        <i class="mdui-icon material-icons">error_outline</i>
+    </span>
+    <span class="mdui-chip-title">{{ error }}</span>
+</div>
+{% endif %}
+<form method="POST" action="/register" class="register">
+    <div class="mdui-textfield">
+        <i class="mdui-icon material-icons">account_circle</i>
+        <label class="mdui-textfield-label">用户名</label>
+        <input class="mdui-textfield-input" type="text" maxlength="20" name="username" pattern="{{ username_regex }}"
+            required />
+        <div class="mdui-textfield-error">用户名必须由 4-20 位字母、数字或下划线组成</div>
+        <div class="mdui-textfield-helper">请输入由 4-20 位字母、数字或下划线组成的用户名</div>
+    </div>
+    <div class="mdui-textfield">
+        <i class="mdui-icon material-icons">lock</i>
+        <label class="mdui-textfield-label">密码</label>
+        <input class="mdui-textfield-input" type="password" maxlength="20" name="password"
+            pattern="{{ password_regex }}" required />
+        <div class="mdui-textfield-error">密码必须包含大小写字母、数字和特殊字符，长度为 8-20 位</div>
+        <div class="mdui-textfield-helper">请输入包含大小写字母、数字和特殊字符的密码，长度为 8-20 位</div>
+    </div>
+    <div class="mdui-textfield">
+        <i class="mdui-icon material-icons">lock</i>
+        <label class="mdui-textfield-label">确认密码</label>
+        <input class="mdui-textfield-input" type="password" maxlength="20" name="repeat-password" required />
+        <div class="mdui-textfield-error">两次输入的密码不一致</div>
+        <div class="mdui-textfield-helper">请再次输入密码</div>
+    </div>
+    <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-btn-block mdui-m-y-4" type="submit">注册</button>
+</form>
+{% endblock %}
+{% block script %}
+<script>
+    const password = document.querySelector('input[name="password"]');
+    const repeatPassword = document.querySelector('input[name="repeat-password"]');
+
+    const checkPassword = () => {
+        if (password.value !== repeatPassword.value) {
+            repeatPassword.setCustomValidity('两次输入的密码不一致');
+        } else
+            repeatPassword.setCustomValidity('');
+    };
+
+    password.addEventListener('input', checkPassword);
+    repeatPassword.addEventListener('input', checkPassword);
+</script>
+{% endblock %}
