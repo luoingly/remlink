@@ -1,6 +1,7 @@
 from flask import Blueprint, request, session, render_template, redirect
 
-from .services import UserService, USERNAME_REGEX, PASSWORD_REGEX
+from .services import USERNAME_REGEX, PASSWORD_REGEX
+from .services import UserService, PostService
 
 
 blueprint = Blueprint('main', __name__)
@@ -55,8 +56,8 @@ def login_post():
     if session.get('user_id'):
         return redirect('/')
 
-    username = request.form['username']
-    password = request.form['password']
+    username = request.form.get('username', '')
+    password = request.form.get('password', '')
 
     try:
         user = UserService.login(username, password)
@@ -70,3 +71,26 @@ def login_post():
 def logout():
     session.clear()
     return redirect('/')
+
+
+@blueprint.route('/new', methods=['GET'])
+def new_get():
+    if not session.get('user_id'):
+        return redirect('/login')
+    return render_template('new.html')
+
+
+@blueprint.route('/new', methods=['POST'])
+def new_post():
+    if not session.get('user_id'):
+        return redirect('/login')
+    user_id = session['user_id']
+
+    content = request.form.get('content', '')
+    privacy = request.form.get('privacy', 'public')
+
+    try:
+        PostService.create_post(user_id, content, privacy)
+        return redirect('/')
+    except Exception as e:
+        return render_template('new.html', error=str(e))

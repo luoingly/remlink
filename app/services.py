@@ -76,6 +76,35 @@ class UserService:
 class PostService:
 
     @staticmethod
+    def create_post(user_id: int, content: str,
+                    privacy_str: str = 'public') -> Post:
+        privacy = Privacy(privacy_str)
+
+        if not privacy.is_valid():
+            raise ValueError("隐私设置无效。")
+        if not (0 < len(content) <= 500):
+            raise ValueError("动态内容长度应在 1-500 字符之间。")
+
+        connection = get_connection()
+        query = \
+            "INSERT INTO posts (user_id, content, privacy) " \
+            "VALUES (%s, %s, %s) " \
+            "RETURNING *"
+        params = (user_id, content, privacy.privacy)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+                post = cursor.fetchone()
+            connection.commit()
+            return Post(**post)
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("发布动态失败") from e
+        finally:
+            connection.close()
+
+    @staticmethod
     def get_post(user_id: int, post_id: int) -> Post:
         connection = get_connection()
         query = "CALL get_post(%s, %s);"

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}发布动态{% endblock %}
+{% block style %}
+<style>
+    .new {
+        max-width: 448px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="mdui-typo mdui-p-t-4 mdui-p-b-2">
+    <h1>发布动态</h1>
+    <hr />
+</div>
+{% if error %}
+<div class="mdui-chip">
+    <span class="mdui-chip-icon mdui-color-red">
+        <i class="mdui-icon material-icons">error_outline</i>
+    </span>
+    <span class="mdui-chip-title">{{ error }}</span>
+</div>
+{% endif %}
+<form method="POST" action="/new" class="new">
+    <div class="mdui-textfield">
+        <label class="mdui-textfield-label">动态内容</label>
+        <textarea class="mdui-textfield-input" type="text" maxlength="500" name="content" rows="8" placeholder="说点什么吧。"
+            required></textarea>
+    </div>
+    <div class="mdui-row-xs-1 mdui-row-sm-3 mdui-p-x-1">
+        <label class="mdui-col mdui-radio">
+            <input type="radio" name="privacy" value="public" checked />
+            <i class="mdui-radio-icon"></i>
+            所有人可见
+        </label>
+        <label class="mdui-col mdui-radio">
+            <input type="radio" name="privacy" value="friends" />
+            <i class="mdui-radio-icon"></i>
+            仅好友可见
+        </label>
+        <label class="mdui-col mdui-radio">
+            <input type="radio" name="privacy" value="private" />
+            <i class="mdui-radio-icon"></i>
+            仅自己可见
+        </label>
+    </div>
+    <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-btn-block mdui-m-t-4" type="submit">发布动态</button>
+</form>
+{% endblock %}

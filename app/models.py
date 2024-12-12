@@ -21,7 +21,7 @@ class Privacy:
         self.privacy = privacy
 
     def is_valid(self) -> bool:
-        return self.privacy in {'public', 'friend', 'private'}
+        return self.privacy in {'public', 'friends', 'private'}
 
 
 class Post:
