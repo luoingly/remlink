@@ -26,7 +26,11 @@ class Privacy:
         return self.privacy in {'public', 'friends', 'private'}
 
     def __repr__(self):
-        return f'<Remlink Privacy: {self.privacy}>'
+        return {
+            'public': '公开',
+            'friends': '好友圈',
+            'private': '私密'
+        }[self.privacy]
 
 
 class Post:
