@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{% if error %}
+<div class="mdui-chip">
+    <span class="mdui-chip-icon mdui-color-red">
+        <i class="mdui-icon material-icons">error_outline</i>
+    </span>
+    <span class="mdui-chip-title">{{ error }}</span>
+</div>
+{% endif %}
+{% include "posts.html" %}
+{% endblock %}

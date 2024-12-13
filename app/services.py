@@ -10,6 +10,8 @@ USERNAME_REGEX = r'^[a-zA-Z0-9_]{4,20}$'
 PASSWORD_REGEX = \
     r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
 
+PAGE_SIZE = 10
+
 
 class UserService:
 
@@ -141,11 +143,12 @@ class PostService:
             connection.close()
 
     @staticmethod
-    def get_posts(user_id: int | None = None, target_user_id: int | None = None,
-                  offset: int = 0, limit: int = 10) -> list[Post]:
+    def get_posts(viewer_user_id: int | None = None,
+                  target_user_id: int | None = None,
+                  offset: int = 0, limit: int = PAGE_SIZE) -> list[Post]:
         connection = get_connection()
         query = "CALL get_visible_posts(%s, %s, %s, %s);"
-        params = (user_id, target_user_id, offset, limit)
+        params = (viewer_user_id, target_user_id, offset, limit)
 
         try:
             with connection.cursor(DictCursor) as cursor:
