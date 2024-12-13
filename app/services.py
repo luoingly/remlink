@@ -71,7 +71,7 @@ class UserService:
             raise ValueError(MISMATCH_ERROR)
 
         return user
-    
+
     @staticmethod
     def get_profile(user_id: int) -> Profile:
         connection = get_connection()
@@ -95,7 +95,7 @@ class PostService:
 
     @staticmethod
     def create_post(user_id: int, content: str,
-                    privacy_str: str = 'public') -> Post:
+                    privacy_str: str = 'public') -> int:
         privacy = Privacy(privacy_str)
 
         if not privacy.is_valid():
@@ -107,7 +107,7 @@ class PostService:
         query = \
             "INSERT INTO posts (user_id, content, privacy) " \
             "VALUES (%s, %s, %s) " \
-            "RETURNING *"
+            "RETURNING post_id"
         params = (user_id, content, privacy.privacy)
 
         try:
@@ -115,7 +115,7 @@ class PostService:
                 cursor.execute(query, params)
                 post = cursor.fetchone()
             connection.commit()
-            return Post(**post)
+            return post['post_id']
         except Exception as e:
             connection.rollback()
             raise DatabaseError("发布动态失败") from e
