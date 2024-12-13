@@ -11,13 +11,16 @@ blueprint = Blueprint('main', __name__)
 def index():
     viewer_user_id = session.get('user_id', None)
     page = request.args.get('page', 1)
+    logined = viewer_user_id is not None
 
     try:
         posts = PostService.get_posts(
             viewer_user_id, None, PAGE_SIZE * (page - 1))
-        return render_template('index.html', posts=posts, page=page)
+        return render_template(
+            'index.html', posts=posts, page=page, logined=logined)
     except Exception as e:
-        return render_template('index.html', error=str(e), posts=[], page=page)
+        return render_template(
+            'index.html', error=str(e), posts=[], page=page, logined=logined)
 
 
 @blueprint.route('/register', methods=['GET'])
@@ -25,7 +28,7 @@ def register_get():
     if session.get('user_id'):
         return redirect('/')
     return render_template(
-        'register.html',
+        'register.html', logined=False,
         username_regex=USERNAME_REGEX, password_regex=PASSWORD_REGEX)
 
 
@@ -43,7 +46,7 @@ def register_post():
         return redirect('/')
     except Exception as e:
         return render_template(
-            'register.html', error=str(e),
+            'register.html', error=str(e), logined=False,
             username_regex=USERNAME_REGEX, password_regex=PASSWORD_REGEX)
 
 
@@ -51,7 +54,7 @@ def register_post():
 def login_get():
     if session.get('user_id'):
         return redirect('/')
-    return render_template('login.html')
+    return render_template('login.html', logined=False)
 
 
 @blueprint.route('/login', methods=['POST'])
@@ -67,7 +70,7 @@ def login_post():
         session.update({'user_id': user.user_id, 'username': user.username})
         return redirect('/')
     except Exception as e:
-        return render_template('login.html', error=str(e))
+        return render_template('login.html', error=str(e), logined=False)
 
 
 @blueprint.route('/logout', methods=['GET'])
@@ -80,7 +83,7 @@ def logout():
 def new_get():
     if not session.get('user_id'):
         return redirect('/login')
-    return render_template('new.html')
+    return render_template('new.html', logined=True)
 
 
 @blueprint.route('/new', methods=['POST'])
@@ -96,13 +99,21 @@ def new_post():
         PostService.create_post(user_id, content, privacy)
         return redirect('/')
     except Exception as e:
-        return render_template('new.html', error=str(e))
+        return render_template('new.html', error=str(e), logined=True)
+
+
+@blueprint.route('/profile')
+def profile_redirect():
+    if not session.get('user_id'):
+        return redirect('/login')
+    return redirect(f'/profile/{session["user_id"]}')
 
 
 @blueprint.route('/profile/<int:target_user_id>')
 def profile(target_user_id: int):
     viewer_user_id = session.get('user_id', None)
     page = request.args.get('page', 1)
+    logined = viewer_user_id is not None
 
     try:
         profile = UserService.get_profile(viewer_user_id)

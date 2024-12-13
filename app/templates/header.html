@@ -1,17 +1,20 @@
 <div class="mdui-appbar mdui-shadow-0 mdui-appbar-fixed">
     <div class="mdui-toolbar">
-        <i class="mdui-icon material-icons mdui-m-l-4 mdui-m-r-0">gesture</i>
+        <i class="mdui-icon material-icons mdui-m-l-3 mdui-m-r-0">gesture</i>
         <a href="/" class="mdui-typo-title">Remlink</a>
         <div class="mdui-toolbar-spacer"></div>
-        <a href="javascript:;" class="mdui-btn mdui-btn-icon">
-            <i class="mdui-icon material-icons">search</i>
+        {% if logined %}
+        <a href="/profile" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '个人中心'}">
+            <i class="mdui-icon material-icons">account_box</i>
         </a>
-        <a href="javascript:;" class="mdui-btn mdui-btn-icon">
-            <i class="mdui-icon material-icons">refresh</i>
+        <a href="/logout" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '退出账号'}">
+            <i class="mdui-icon material-icons">exit_to_app</i>
         </a>
-        <a href="javascript:;" class="mdui-btn mdui-btn-icon">
-            <i class="mdui-icon material-icons">more_vert</i>
+        {% else %}
+        <a href="/login" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '登录'}">
+            <i class="mdui-icon material-icons">account_circle</i>
         </a>
+        {% endif %}
     </div>
 </div>
 <div style="z-index: 999; position: fixed; top: 0; right: 0; left: 0;
