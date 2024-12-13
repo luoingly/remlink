@@ -35,13 +35,12 @@ class Post:
                  content: str, created_at: datetime, privacy: str,
                  username: str, bio: str | None = None,
                  follower_count: int = 0, followee_count: int = 0,
-                 like_count: int = 0, comment_count: int = 0, liked: int = 0):
+                 like_count: int = 0, liked: int = 0):
         self.post_id = post_id
         self.content = content
         self.created_at = created_at + get_timezone()
         self.privacy = Privacy(privacy)
         self.like_count = like_count
-        self.comment_count = comment_count
         self.liked = bool(liked)
         self.author = Profile(user_id, username, bio,
                               follower_count, followee_count)

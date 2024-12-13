@@ -55,13 +55,3 @@ python main.py
 | `user_id`    | INT      | NOT NULL, FOREIGN KEY (users.user_id) | 点赞者用户 ID      |
 | `post_id`    | INT      | NOT NULL, FOREIGN KEY (posts.post_id) | 被点赞的动态 ID    |
 | `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP             | 点赞时间           |
-
-### 评论表 (`comments`)
-
-| 字段名       | 数据类型 | 约束条件                              | 说明            |
-| ------------ | -------- | ------------------------------------- | --------------- |
-| `comment_id` | INT      | AUTO_INCREMENT, PRIMARY KEY           | 评论唯一标识符  |
-| `user_id`    | INT      | NOT NULL, FOREIGN KEY (users.user_id) | 评论者用户 ID   |
-| `post_id`    | INT      | NOT NULL, FOREIGN KEY (posts.post_id) | 被评论的动态 ID |
-| `content`    | TEXT     | NOT NULL                              | 评论内容        |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP             | 评论时间        |

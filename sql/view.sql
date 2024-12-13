@@ -13,8 +13,6 @@ GROUP BY u.user_id;
 CREATE VIEW IF NOT EXISTS posts_view AS
 SELECT p.*, u.username, u.bio, u.follower_count, u.followee_count,
     (SELECT COUNT(like_id) 
-        FROM likes l WHERE l.post_id = p.post_id) AS like_count,
-    (SELECT COUNT(comment_id) 
-        FROM comments c WHERE c.post_id = p.post_id) AS comment_count
+        FROM likes l WHERE l.post_id = p.post_id) AS like_count
 FROM posts p
 LEFT JOIN users_view u ON p.user_id = u.user_id;

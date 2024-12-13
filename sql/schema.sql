@@ -49,17 +49,3 @@ CREATE TABLE IF NOT EXISTS likes (
     UNIQUE INDEX idx_user_post (user_id, post_id)
 );
 
-
--- 评论表
-CREATE TABLE IF NOT EXISTS comments (
-    comment_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    post_id INT NOT NULL,
-    content TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (post_id) REFERENCES posts(post_id),
-    INDEX idx_user_id (user_id),
-    INDEX idx_post_id (post_id),
-    INDEX idx_user_post (user_id, post_id)
-);
