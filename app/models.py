@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from .config import get_timezone
+
 
 class User:
 
@@ -8,7 +10,7 @@ class User:
         self.user_id = user_id
         self.username = username
         self.password = password
-        self.created_at = created_at
+        self.created_at = created_at + get_timezone()
         self.bio = bio
 
     def __repr__(self):
@@ -32,7 +34,7 @@ class Post:
         self.post_id = post_id
         self.user_id = user_id
         self.content = content
-        self.created_at = created_at
+        self.created_at = created_at + get_timezone()
         self.privacy = Privacy(privacy)
         self.like_count = like_count
         self.comment_count = comment_count

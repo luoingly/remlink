@@ -2,6 +2,7 @@ import os
 
 from secrets import token_urlsafe
 from dotenv import load_dotenv
+from datetime import timedelta
 from pathlib import Path
 
 
@@ -40,6 +41,9 @@ def get_secret_key() -> str:
 
 def is_debug_enabled() -> bool:
     return os.getenv('DEBUG', 'False').lower() == 'true'
+
+def get_timezone() -> timedelta:
+    return timedelta(hours=int(os.getenv('TIMEZONE', 0)))
 
 
 if __name__ == '__main__':
