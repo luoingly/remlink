@@ -14,7 +14,7 @@ class User:
         self.bio = bio
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<Remlink User: {self.username}>'
 
 
 class Privacy:
@@ -24,6 +24,9 @@ class Privacy:
 
     def is_valid(self) -> bool:
         return self.privacy in {'public', 'friends', 'private'}
+
+    def __repr__(self):
+        return f'<Remlink Privacy: {self.privacy}>'
 
 
 class Post:
@@ -41,7 +44,7 @@ class Post:
         self.liked = bool(liked)
 
     def __repr__(self):
-        return f'<Post {self.post_id}>'
+        return f'<Remlink Post: {self.post_id}>'
 
 
 class Profile:
@@ -53,4 +56,6 @@ class Profile:
         self.bio = bio
         self.follower_count = follower_count
         self.followee_count = followee_count
-        
+
+    def __repr__(self):
+        return f'<Remlink Profile: {self.username}>'
