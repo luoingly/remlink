@@ -10,6 +10,14 @@
 python install.py
 ```
 
+### 配置环境变量
+
+```bash
+cp .env.example .env
+```
+
+在 `.env` 文件中填写数据库连接信息。
+
 ### 运行服务端
 
 ```bash
