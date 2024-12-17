@@ -237,3 +237,35 @@ class PostService:
             raise DatabaseError("获取动态失败") from e
         finally:
             connection.close()
+
+    @staticmethod
+    def like(user_id: int, post_id: int) -> None:
+        connection = get_connection()
+        query = "INSERT INTO likes (user_id, post_id) VALUES (%s, %s);"
+        params = (user_id, post_id)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("点赞失败") from e
+        finally:
+            connection.close()
+
+    @staticmethod
+    def unlike(user_id: int, post_id: int) -> None:
+        connection = get_connection()
+        query = "DELETE FROM likes WHERE user_id = %s AND post_id = %s;"
+        params = (user_id, post_id)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("取消点赞失败") from e
+        finally:
+            connection.close()

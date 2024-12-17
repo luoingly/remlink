@@ -175,3 +175,29 @@ def unfollow(target_user_id: int):
         return '', 204
     except Exception as e:
         return str(e), 400
+
+
+@blueprint.route('/like/<int:post_id>', methods=['POST'])
+def like(post_id: int):
+    if not session.get('user_id'):
+        return '', 401
+    user_id = session['user_id']
+
+    try:
+        PostService.like(user_id, post_id)
+        return '', 204
+    except Exception as e:
+        return str(e), 400
+
+
+@blueprint.route('/unlike/<int:post_id>', methods=['POST'])
+def unlike(post_id: int):
+    if not session.get('user_id'):
+        return '', 401
+    user_id = session['user_id']
+
+    try:
+        PostService.unlike(user_id, post_id)
+        return '', 204
+    except Exception as e:
+        return str(e), 400

@@ -52,9 +52,19 @@
 
     <div class="mdui-card-actions">
         {% if post.liked %}
-        <i class="mdui-btn mdui-ripple">liked</i>
+        <button class="mdui-btn mdui-ripple mdui-text-color-red" onclick="action('unlike', {{ post.post_id }});">
+            <i class="mdui-icon material-icons">favorite</i>
+            <span>
+                {{ post.like_count }} 喜欢
+            </span>
+        </button>
         {% else %}
-        <i class="mdui-btn mdui-ripple">like</i>
+        <button class="mdui-btn mdui-ripple" onclick="action('like', {{ post.post_id }});">
+            <i class="mdui-icon material-icons">favorite_border</i>
+            <span>
+                {{ post.like_count }} 喜欢
+            </span>
+        </button>
         {% endif %}
         <i class="mdui-btn mdui-ripple">some action</i>
         <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
