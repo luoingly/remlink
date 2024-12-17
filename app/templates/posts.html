@@ -35,8 +35,10 @@
         </div>
         {% if post.author.following %}
         <button class="mdui-btn mdui-ripple">关注中</button>
-        {% elif not post.owned %}
-        <button class="mdui-btn mdui-ripple">关注</button>
+        {% elif post.owned %}
+        <button class="mdui-btn" disabled>我</button>
+        {% else %}
+        <button class="mdui-btn mdui-ripple mdui-color-theme-accent">关注</button>
         {% endif %}
     </div>
 
