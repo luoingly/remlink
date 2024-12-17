@@ -116,7 +116,7 @@ def profile(target_user_id: int):
     logined = viewer_user_id is not None
 
     try:
-        profile = UserService.get_profile(viewer_user_id)
+        profile = UserService.get_profile(target_user_id)
         posts = PostService.get_posts(
             viewer_user_id, target_user_id, PAGE_SIZE * (page - 1))
         return render_template(
