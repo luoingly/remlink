@@ -43,3 +43,21 @@ BEGIN
     GROUP BY p.post_id
     LIMIT 1;
 END;
+
+
+CREATE PROCEDURE IF NOT EXISTS get_profile(
+    IN viewer_id INT,
+    IN target_user_id INT
+)
+BEGIN
+    SELECT u.*,
+           MAX(CASE WHEN f1.follower_id = viewer_id THEN 1 ELSE 0 END) AS `following`,
+           MAX(CASE WHEN f2.followee_id = viewer_id THEN 1 ELSE 0 END) AS `followed`
+    FROM users_view u
+    LEFT JOIN follows f1 ON u.user_id = f1.followee_id
+    LEFT JOIN follows f2 ON u.user_id = f2.follower_id
+    WHERE u.user_id = target_user_id
+    GROUP BY u.user_id
+    LIMIT 1;
+END;
+    
