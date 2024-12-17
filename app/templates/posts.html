@@ -32,7 +32,7 @@
             <div class="mdui-list-item-title">{{ post.author.username }}</div>
             <div class="mdui-list-item-text mdui-list-item-one-line">{{ post.author.bio }}</div>
         </div>
-        {% if post.author.followed %}
+        {% if post.author.following %}
         <button class="mdui-btn mdui-ripple">关注中</button>
         {% elif post.owned %}
         <button class="mdui-btn" disabled>我</button>

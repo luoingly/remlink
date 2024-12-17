@@ -50,7 +50,7 @@ class Post:
         self.owned = bool(owned)
         self.author = Profile(
             user_id, username, bio, follower_count, followee_count,
-            followed, following)
+            following, followed)
 
     def __repr__(self):
         return f'<Remlink Post: {self.post_id}>'

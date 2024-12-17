@@ -1,10 +1,10 @@
 -- 用户资料视图
 CREATE VIEW IF NOT EXISTS users_view AS
 SELECT u.user_id, u.username, u.bio,
-       COUNT(DISTINCT f.follow_id) AS follower_count,
+       COUNT(DISTINCT f1.follow_id) AS follower_count,
        COUNT(DISTINCT f2.follow_id) AS followee_count
 FROM users u
-LEFT JOIN follows f ON u.user_id = f.followee_id
+LEFT JOIN follows f1 ON u.user_id = f1.followee_id
 LEFT JOIN follows f2 ON u.user_id = f2.follower_id
 GROUP BY u.user_id;
 
