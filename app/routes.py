@@ -145,7 +145,33 @@ def profile(target_user_id: int):
         posts = PostService.get_posts(
             viewer_user_id, target_user_id, PAGE_SIZE * (page - 1))
         return render_template(
-            'profile.html', profile=profile, posts=posts, 
+            'profile.html', profile=profile, posts=posts,
             logined=logined, is_me=viewer_user_id == target_user_id)
     except Exception as e:
         return render_template('error.html', error=str(e), logined=logined)
+
+
+@blueprint.route('/follow/<int:target_user_id>', methods=['POST'])
+def follow(target_user_id: int):
+    if not session.get('user_id'):
+        return '', 401
+    user_id = session['user_id']
+
+    try:
+        UserService.follow(user_id, target_user_id)
+        return '', 204
+    except Exception as e:
+        return str(e), 400
+
+
+@blueprint.route('/unfollow/<int:target_user_id>', methods=['POST'])
+def unfollow(target_user_id: int):
+    if not session.get('user_id'):
+        return '', 401
+    user_id = session['user_id']
+
+    try:
+        UserService.unfollow(user_id, target_user_id)
+        return '', 204
+    except Exception as e:
+        return str(e), 400

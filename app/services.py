@@ -137,6 +137,39 @@ class UserService:
         finally:
             connection.close()
 
+    @staticmethod
+    def follow(user_id: int, target_user_id: int) -> None:
+        connection = get_connection()
+        query = "INSERT INTO follows (follower_id, followee_id) VALUES (%s, %s)"
+        params = (user_id, target_user_id)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("关注失败") from e
+        finally:
+            connection.close()
+
+
+    @staticmethod
+    def unfollow(user_id: int, target_user_id: int) -> None:
+        connection = get_connection()
+        query = "DELETE FROM follows WHERE follower_id = %s AND followee_id = %s"
+        params = (user_id, target_user_id)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("取消关注失败") from e
+        finally:
+            connection.close()
+
 
 class PostService:
 

@@ -33,11 +33,13 @@
             <div class="mdui-list-item-text mdui-list-item-one-line">{{ post.author.bio }}</div>
         </div>
         {% if post.author.following %}
-        <button class="mdui-btn mdui-ripple">关注中</button>
+        <button class="mdui-btn mdui-ripple"
+            onclick="event.stopPropagation(); action('unfollow', {{ post.author.user_id }});">关注中</button>
         {% elif post.owned %}
         <button class="mdui-btn" disabled>我</button>
         {% else %}
-        <button class="mdui-btn mdui-ripple mdui-color-theme-accent">关注</button>
+        <button class="mdui-btn mdui-ripple mdui-color-theme-accent"
+            onclick="event.stopPropagation(); action('follow', {{ post.author.user_id }});">关注</button>
         {% endif %}
     </a>
 
@@ -67,3 +69,17 @@
     <div class="mdui-typo-display-1-opacity mdui-center">Nothing here...</div>
 </div>
 {% endif %}
+
+<script>
+    const action = async (endpoint, user_id) => {
+        const response = await fetch(`/${endpoint}/${user_id}`, { method: 'POST' });
+        if (response.status === 204) {
+            location.reload();
+        } else if (response.status === 401) {
+            location.href = '/login';
+        } else if (response.status === 400) {
+            const message = await response.text();
+            mdui.snackbar({ message: message });
+        }
+    };
+</script>
