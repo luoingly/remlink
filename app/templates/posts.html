@@ -24,8 +24,7 @@
 {% if posts %}
 {% for post in posts %}
 <div class="mdui-card mdui-list mdui-m-y-4 mdui-p-y-0 mdui-shadow-0 mdui-hoverable post">
-
-    <div class="mdui-list-item mdui-ripple">
+    <a href="{{ url_for('main.profile', target_user_id=post.author.user_id) }}" class="mdui-list-item mdui-ripple">
         <i class="mdui-list-item-avatar mdui-icon material-icons">
             {{ ['beach_access', 'flag', 'color_lens', 'directions_run', 'polymer'][post.author.user_id % 5] }}
         </i>
@@ -33,14 +32,14 @@
             <div class="mdui-list-item-title">{{ post.author.username }}</div>
             <div class="mdui-list-item-text mdui-list-item-one-line">{{ post.author.bio }}</div>
         </div>
-        {% if post.author.following %}
+        {% if post.author.followed %}
         <button class="mdui-btn mdui-ripple">关注中</button>
         {% elif post.owned %}
         <button class="mdui-btn" disabled>我</button>
         {% else %}
         <button class="mdui-btn mdui-ripple mdui-color-theme-accent">关注</button>
         {% endif %}
-    </div>
+    </a>
 
     <div class="mdui-card-content">
         <span>{{ post.content }}</span>

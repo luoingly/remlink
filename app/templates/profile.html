@@ -2,7 +2,8 @@
 {% block title %}{{ profile.username }} - Profile{% endblock %}
 {% block style %}
 <style>
-    .profile-actions .mdui-btn, .profile-actions .mdui-menu {
+    .profile-actions .mdui-btn,
+    .profile-actions .mdui-menu {
         border-radius: 7px;
     }
 </style>
@@ -14,8 +15,9 @@
     <hr />
 </div>
 <div class="mdui-card-actions mdui-p-a-0 profile-actions">
-    <span class="mdui-btn mdui-ripple mdui-color-theme-accent">关注</span>
-    <i class="mdui-btn mdui-ripple">some action</i>
+    <span class="mdui-btn mdui-color-theme-accent">{{ profile.follower_count }} 粉丝</span>
+    <span class="mdui-btn">{{ profile.followee_count }} 关注</span>
+    {% if is_me %}
     <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0" mdui-menu="{target: '#more-actions'}">
         <i class="mdui-icon material-icons">expand_more</i>
     </button>
@@ -27,6 +29,7 @@
             <a href="/security" class="mdui-ripple">修改密码</a>
         </li>
     </ul>
+    {% endif %}
 </div>
 {% if error %}
 <div class="mdui-chip">

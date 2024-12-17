@@ -145,6 +145,7 @@ def profile(target_user_id: int):
         posts = PostService.get_posts(
             viewer_user_id, target_user_id, PAGE_SIZE * (page - 1))
         return render_template(
-            'profile.html', profile=profile, posts=posts)
+            'profile.html', profile=profile, posts=posts, 
+            logined=logined, is_me=viewer_user_id == target_user_id)
     except Exception as e:
-        return render_template('error.html', error=str(e))
+        return render_template('error.html', error=str(e), logined=logined)
