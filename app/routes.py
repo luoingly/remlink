@@ -79,6 +79,31 @@ def logout():
     return redirect('/')
 
 
+@blueprint.route('/security', methods=['GET'])
+def security_get():
+    if not session.get('user_id'):
+        return redirect('/login')
+    return render_template('security.html', logined=True,
+                           password_regex=PASSWORD_REGEX)
+
+
+@blueprint.route('/security', methods=['POST'])
+def security_post():
+    if not session.get('user_id'):
+        return redirect('/login')
+    user_id = session['user_id']
+
+    old_password = request.form.get('old-password', '')
+    new_password = request.form.get('new-password', '')
+
+    try:
+        UserService.change_password(user_id, old_password, new_password)
+        return redirect('/')
+    except Exception as e:
+        return render_template('security.html', error=str(e), logined=True,
+                               password_regex=PASSWORD_REGEX)
+
+
 @blueprint.route('/new', methods=['GET'])
 def new_get():
     if not session.get('user_id'):

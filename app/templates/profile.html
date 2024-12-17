@@ -1,16 +1,32 @@
 {% extends "base.html" %}
+{% block title %}{{ profile.username }} - Profile{% endblock %}
+{% block style %}
+<style>
+    .profile-actions .mdui-btn, .profile-actions .mdui-menu {
+        border-radius: 7px;
+    }
+</style>
+{% endblock %}
 {% block content %}
-<div class="mdui-typo mdui-p-t-4 mdui-p-b-2">
+<div class="mdui-typo mdui-p-t-4 mdui-p-b-4">
     <h1>{{ profile.username }}</h1>
     <p>{{ profile.bio }}</p>
-    <div class="mdui-card-actions mdui-p-a-0">
-        <span class="mdui-btn mdui-ripple mdui-color-theme-accent">关注</span>
-        <i class="mdui-btn mdui-ripple">some action</i>
-        <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
-            <i class="mdui-icon material-icons">expand_more</i>
-        </button>
-    </div>
     <hr />
+</div>
+<div class="mdui-card-actions mdui-p-a-0 profile-actions">
+    <span class="mdui-btn mdui-ripple mdui-color-theme-accent">关注</span>
+    <i class="mdui-btn mdui-ripple">some action</i>
+    <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0" mdui-menu="{target: '#more-actions'}">
+        <i class="mdui-icon material-icons">expand_more</i>
+    </button>
+    <ul class="mdui-menu mdui-p-a-0" id="more-actions">
+        <li class="mdui-menu-item">
+            <a href="/setting" class="mdui-ripple">修改资料</a>
+        </li>
+        <li class="mdui-menu-item">
+            <a href="/security" class="mdui-ripple">修改密码</a>
+        </li>
+    </ul>
 </div>
 {% if error %}
 <div class="mdui-chip">

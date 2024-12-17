@@ -32,6 +32,24 @@ class UserService:
             connection.close()
 
     @staticmethod
+    def _get_user_by_id(user_id: int) -> User:
+        connection = get_connection()
+        query = "SELECT * FROM users WHERE user_id = %s"
+        params = (user_id,)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+                user = cursor.fetchone()
+            if not user:
+                raise ValueError("用户不存在。")
+            return User(**user)
+        except Exception as e:
+            raise DatabaseError("获取用户信息失败") from e
+        finally:
+            connection.close()
+
+    @staticmethod
     def register(username: str, password: str) -> User:
         if not re.match(USERNAME_REGEX, username):
             raise ValueError("用户名必须由 4-20 位字母、数字或下划线组成。")
@@ -89,6 +107,33 @@ class UserService:
             return Profile(**profile)
         except Exception as e:
             raise DatabaseError("获取用户信息失败") from e
+        finally:
+            connection.close()
+
+    @staticmethod
+    def change_password(user_id: int, previous_password: str,
+                        new_password: str) -> None:
+        if previous_password == new_password:
+            raise ValueError("新密码不能与原密码相同。")
+
+        if not re.match(PASSWORD_REGEX, new_password):
+            raise ValueError("新密码格式错误。")
+
+        user = UserService._get_user_by_id(user_id)
+        if not check_password(previous_password, user.password):
+            raise ValueError("原密码错误。")
+
+        connection = get_connection()
+        query = "UPDATE users SET password = %s WHERE user_id = %s"
+        params = (hash_password(new_password), user_id)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("修改密码失败") from e
         finally:
             connection.close()
 
