@@ -264,3 +264,8 @@ def unlike(post_id: int):
         return '', 204
     except Exception as e:
         return str(e), 400
+
+
+@blueprint.app_errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html', error='404 Not Found'), 404
