@@ -41,13 +41,14 @@ class UserService:
             with connection.cursor(DictCursor) as cursor:
                 cursor.execute(query, params)
                 user = cursor.fetchone()
-            if not user:
-                raise ValueError("用户不存在。")
-            return User(**user)
         except Exception as e:
             raise DatabaseError("获取用户信息失败") from e
         finally:
             connection.close()
+
+        if not user:
+            raise ValueError("用户不存在。")
+        return User(**user)
 
     @staticmethod
     def register(username: str, password: str) -> User:
@@ -70,12 +71,13 @@ class UserService:
                 cursor.execute(query, params)
                 user = cursor.fetchone()
             connection.commit()
-            return User(**user)
         except Exception as e:
             connection.rollback()
             raise DatabaseError("注册失败") from e
         finally:
             connection.close()
+
+        return User(**user)
 
     @staticmethod
     def login(username: str, password: str) -> User:
@@ -102,13 +104,14 @@ class UserService:
             with connection.cursor(DictCursor) as cursor:
                 cursor.execute(query, params)
                 profile = cursor.fetchone()
-            if not profile:
-                raise ValueError("用户不存在。")
-            return Profile(**profile)
         except Exception as e:
             raise DatabaseError("获取用户信息失败") from e
         finally:
             connection.close()
+
+        if not profile:
+            raise ValueError("用户不存在。")
+        return Profile(**profile)
 
     @staticmethod
     def update_profile(user_id: int, username: str, bio: str) -> None:
@@ -266,13 +269,14 @@ class PostService:
             with connection.cursor(DictCursor) as cursor:
                 cursor.execute(query, params)
                 post = cursor.fetchone()
-            if not post:
-                raise ValueError("动态不存在或不可见。")
-            return Post(**post)
         except Exception as e:
             raise DatabaseError("获取动态失败") from e
         finally:
             connection.close()
+        
+        if not post:
+            raise ValueError("动态不存在或不可见。")
+        return Post(**post)
 
     @staticmethod
     def get_posts(viewer_user_id: int | None = None,
@@ -286,11 +290,12 @@ class PostService:
             with connection.cursor(DictCursor) as cursor:
                 cursor.execute(query, params)
                 posts = cursor.fetchall()
-            return [Post(**post) for post in posts]
         except Exception as e:
             raise DatabaseError("获取动态失败") from e
         finally:
             connection.close()
+
+        return [Post(**post) for post in posts]
 
     @staticmethod
     def like(user_id: int, post_id: int) -> None:
