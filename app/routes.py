@@ -266,6 +266,19 @@ def unlike(post_id: int):
         return str(e), 400
 
 
+@blueprint.route('/delete/<int:post_id>', methods=['POST'])
+def delete(post_id: int):
+    if not session.get('user_id'):
+        return '', 401
+    user_id = session['user_id']
+
+    try:
+        PostService.delete(user_id, post_id)
+        return '', 204
+    except Exception as e:
+        return str(e), 400
+
+
 @blueprint.app_errorhandler(404)
 def page_not_found(e):
     return render_template('error.html', error='404 Not Found'), 404

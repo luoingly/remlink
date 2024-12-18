@@ -273,7 +273,7 @@ class PostService:
             raise DatabaseError("获取动态失败") from e
         finally:
             connection.close()
-        
+
         if not post:
             raise ValueError("动态不存在或不可见。")
         return Post(**post)
@@ -326,5 +326,25 @@ class PostService:
         except Exception as e:
             connection.rollback()
             raise DatabaseError("取消点赞失败") from e
+        finally:
+            connection.close()
+
+    @staticmethod
+    def delete(user_id: int, post_id: int) -> None:
+        post = PostService.get_post(user_id, post_id)
+        if not post.owned:
+            raise ValueError("无权删除他人的动态。")
+
+        connection = get_connection()
+        query = "DELETE FROM posts WHERE post_id = %s;"
+        params = (post_id,)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("删除动态失败") from e
         finally:
             connection.close()

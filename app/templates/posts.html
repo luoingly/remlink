@@ -68,9 +68,9 @@
         </button>
         {% endif %}
         {% if post.owned %}
-        <a class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
+        <span class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0" onclick="delete_post({{ post.post_id }});">
             <i class="mdui-icon material-icons">delete_forever</i>
-        </a>
+        </span>
         <a class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0"
             href="{{ url_for('main.edit_get', post_id=post.post_id) }}">
             <i class="mdui-icon material-icons">edit</i>
@@ -87,8 +87,8 @@
 {% endif %}
 
 <script>
-    const action = async (endpoint, user_id) => {
-        const response = await fetch(`/${endpoint}/${user_id}`, { method: 'POST' });
+    const action = async (endpoint, id) => {
+        const response = await fetch(`/${endpoint}/${id}`, { method: 'POST' });
         if (response.status === 204) {
             location.reload();
         } else if (response.status === 401) {
@@ -97,5 +97,13 @@
             const message = await response.text();
             mdui.snackbar({ message: message });
         }
+    };
+    const delete_post = (post_id) => {
+        mdui.confirm('你确定要删除这条动态吗？',
+            function async() {
+                action('delete', post_id);
+            }, () => { },
+            { confirmText: '确定', cancelText: '取消' }
+        );
     };
 </script>
