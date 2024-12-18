@@ -67,10 +67,14 @@
             </span>
         </button>
         {% endif %}
-        <i class="mdui-btn mdui-ripple">some action</i>
+        {% if post.owned %}
         <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
-            <i class="mdui-icon material-icons">expand_more</i>
+            <i class="mdui-icon material-icons">delete_forever</i>
         </button>
+        <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
+            <i class="mdui-icon material-icons">edit</i>
+        </button>
+        {% endif %}
     </div>
 
 </div>
