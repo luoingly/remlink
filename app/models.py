@@ -71,3 +71,6 @@ class Profile:
 
     def __repr__(self):
         return f'<Remlink Profile: {self.username}>'
+
+    def get_bio(self) -> str:
+        return self.bio if self.bio else '这个人很懒，什么也没留下。'

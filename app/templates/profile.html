@@ -11,14 +11,21 @@
 {% block content %}
 <div class="mdui-typo mdui-p-t-4 mdui-p-b-4">
     <h1>{{ profile.username }}</h1>
-    <p>{{ profile.bio }}</p>
+    <p>{{ profile.get_bio() }}</p>
     <hr />
 </div>
 <div class="mdui-card-actions mdui-p-a-0 profile-actions">
     <span class="mdui-btn mdui-color-theme-accent">{{ profile.follower_count }} 粉丝</span>
     <span class="mdui-btn">{{ profile.followee_count }} 关注</span>
     {% if is_me %}
-    <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0" mdui-menu="{target: '#more-actions'}">
+    <a href="/settings" class="mdui-btn mdui-float-right mdui-m-r-0 mdui-hidden-xs-down mdui-color-theme-accent">
+        修改资料
+    </a>
+    <a href="/security" class="mdui-btn mdui-float-right mdui-m-r-0 mdui-hidden-xs-down mdui-m-r-2">
+        修改密码
+    </a>
+    <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0 mdui-hidden-sm-up mdui-color-theme-accent"
+        mdui-menu="{target: '#more-actions'}">
         <i class="mdui-icon material-icons">expand_more</i>
     </button>
     <ul class="mdui-menu mdui-p-a-0" id="more-actions">

@@ -31,7 +31,7 @@
         <div class="mdui-list-item-content" style="max-width: calc(100% - 144px);">
             <div class="mdui-list-item-title">{{ post.author.username }}</div>
             <div class="mdui-list-item-text mdui-text-truncate mdui-list-item-one-line" style="display: block;">{{
-                post.author.bio }}</div>
+                post.author.get_bio() }}</div>
         </div>
         {% if post.author.following %}
         <button class="mdui-btn mdui-ripple"
