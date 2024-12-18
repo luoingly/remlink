@@ -230,6 +230,33 @@ class PostService:
             connection.close()
 
     @staticmethod
+    def update_post(user_id: int, post_id: int, content: str, privacy_str: str) -> None:
+        privacy = Privacy(privacy_str)
+
+        if not privacy.is_valid():
+            raise ValueError("隐私设置无效。")
+        if not (0 < len(content) <= 500):
+            raise ValueError("动态内容长度应在 1-500 字符之间。")
+
+        post = PostService.get_post(user_id, post_id)
+        if not post.owned:
+            raise ValueError("无权编辑他人的动态。")
+
+        connection = get_connection()
+        query = "UPDATE posts SET content = %s, privacy = %s WHERE post_id = %s"
+        params = (content, privacy.privacy, post_id)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("编辑动态失败") from e
+        finally:
+            connection.close()
+
+    @staticmethod
     def get_post(user_id: int, post_id: int) -> Post:
         connection = get_connection()
         query = "CALL get_post(%s, %s);"

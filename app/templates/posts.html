@@ -68,12 +68,13 @@
         </button>
         {% endif %}
         {% if post.owned %}
-        <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
+        <a class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
             <i class="mdui-icon material-icons">delete_forever</i>
-        </button>
-        <button class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0">
+        </a>
+        <a class="mdui-btn mdui-btn-icon mdui-float-right mdui-m-r-0"
+            href="{{ url_for('main.edit_get', post_id=post.post_id) }}">
             <i class="mdui-icon material-icons">edit</i>
-        </button>
+        </a>
         {% endif %}
     </div>
 

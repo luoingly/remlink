@@ -32,6 +32,15 @@ class Privacy:
             'private': '私密'
         }[self.privacy]
 
+    def is_public(self) -> bool:
+        return self.privacy == 'public'
+
+    def is_friends(self) -> bool:
+        return self.privacy == 'friends'
+
+    def is_private(self) -> bool:
+        return self.privacy == 'private'
+
 
 class Post:
 

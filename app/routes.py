@@ -183,6 +183,37 @@ def settings_post():
                                profile=profile, username_regex=USERNAME_REGEX)
 
 
+@blueprint.route('/edit/<int:post_id>', methods=['GET'])
+def edit_get(post_id: int):
+    if not session.get('user_id'):
+        return redirect('/login')
+    user_id = session['user_id']
+
+    try:
+        post = PostService.get_post(user_id, post_id)
+        return render_template('edit.html', post=post, logined=True)
+    except Exception as e:
+        return render_template('error.html', error=str(e), logined=True)
+
+
+@blueprint.route('/edit/<int:post_id>', methods=['POST'])
+def edit_post(post_id: int):
+    if not session.get('user_id'):
+        return redirect('/login')
+    user_id = session['user_id']
+
+    post = PostService.get_post(user_id, post_id)
+    content = request.form.get('content', '')
+    privacy = request.form.get('privacy', 'public')
+
+    try:
+        PostService.update_post(user_id, post_id, content, privacy)
+        return redirect(f'/profile/{user_id}')
+    except Exception as e:
+        return render_template('edit.html', error=str(e),
+                               logined=True, post=post)
+
+
 @blueprint.route('/follow/<int:target_user_id>', methods=['POST'])
 def follow(target_user_id: int):
     if not session.get('user_id'):
