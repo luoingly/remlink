@@ -63,7 +63,7 @@ class Profile:
                  following: int = 0, followed: int = 0):
         self.user_id = user_id
         self.username = username
-        self.bio = bio
+        self.bio = '' if bio is None else bio
         self.follower_count = follower_count
         self.followee_count = followee_count
         self.following = bool(following)

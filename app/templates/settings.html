@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}修改资料{% endblock %}
+{% block style %}
+<style>
+    .settings {
+        max-width: 448px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="mdui-typo mdui-p-t-4 mdui-p-b-2">
+    <h1>修改资料</h1>
+    <hr />
+</div>
+{% if error %}
+<div class="mdui-chip">
+    <span class="mdui-chip-icon mdui-color-red">
+        <i class="mdui-icon material-icons">error_outline</i>
+    </span>
+    <span class="mdui-chip-title">{{ error }}</span>
+</div>
+{% endif %}
+<form method="POST" action="/settings" class="settings">
+    <div class="mdui-textfield">
+        <i class="mdui-icon material-icons">account_circle</i>
+        <label class="mdui-textfield-label">用户名</label>
+        <input class="mdui-textfield-input" type="text" maxlength="20" name="username" pattern="{{ username_regex }}"
+            value="{{ profile.username }}" required />
+        <div class="mdui-textfield-error">用户名必须由 4-20 位字母、数字或下划线组成</div>
+        <div class="mdui-textfield-helper">请输入由 4-20 位字母、数字或下划线组成的用户名</div>
+    </div>
+    <div class="mdui-textfield">
+        <i class="mdui-icon material-icons">border_color</i>
+        <label class="mdui-textfield-label">个人简介</label>
+        <textarea class="mdui-textfield-input" type="text" maxlength="100" name="bio" rows="3"
+            placeholder="说点什么吧。">{{ profile.bio }}</textarea>
+    </div>
+    <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-btn-block mdui-m-t-4" type="submit">修改</button>
+</form>
+{% endblock %}

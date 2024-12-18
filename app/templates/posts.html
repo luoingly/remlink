@@ -28,9 +28,10 @@
         <i class="mdui-list-item-avatar mdui-icon material-icons">
             {{ ['beach_access', 'flag', 'color_lens', 'directions_run', 'polymer'][post.author.user_id % 5] }}
         </i>
-        <div class="mdui-list-item-content">
+        <div class="mdui-list-item-content" style="max-width: calc(100% - 144px);">
             <div class="mdui-list-item-title">{{ post.author.username }}</div>
-            <div class="mdui-list-item-text mdui-list-item-one-line">{{ post.author.bio }}</div>
+            <div class="mdui-list-item-text mdui-text-truncate mdui-list-item-one-line" style="display: block;">{{
+                post.author.bio }}</div>
         </div>
         {% if post.author.following %}
         <button class="mdui-btn mdui-ripple"

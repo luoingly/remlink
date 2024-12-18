@@ -111,6 +111,34 @@ class UserService:
             connection.close()
 
     @staticmethod
+    def update_profile(user_id: int, username: str, bio: str) -> None:
+        if not re.match(USERNAME_REGEX, username):
+            raise ValueError("用户名必须由 4-20 位字母、数字或下划线组成。")
+
+        if len(bio) > 100:
+            raise ValueError("个人简介长度不能超过 100 字符。")
+
+        Profile = UserService.get_profile(user_id)
+        if username != Profile.username and \
+                UserService._get_user_by_username(username):
+            raise ValueError("用户名已存在，换一个试试吧。")
+
+        connection = get_connection()
+        query = "UPDATE users SET username = %s, bio = %s WHERE user_id = %s"
+        params = (username, bio.replace(
+            '\r\n', '\n').replace('\n', ' '), user_id)
+
+        try:
+            with connection.cursor(DictCursor) as cursor:
+                cursor.execute(query, params)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            raise DatabaseError("更新用户信息失败") from e
+        finally:
+            connection.close()
+
+    @staticmethod
     def change_password(user_id: int, previous_password: str,
                         new_password: str) -> None:
         if previous_password == new_password:
@@ -152,7 +180,6 @@ class UserService:
             raise DatabaseError("关注失败") from e
         finally:
             connection.close()
-
 
     @staticmethod
     def unfollow(user_id: int, target_user_id: int) -> None:

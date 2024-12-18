@@ -151,6 +151,38 @@ def profile(target_user_id: int):
         return render_template('error.html', error=str(e), logined=logined)
 
 
+@blueprint.route('/settings', methods=['GET'])
+def settings_get():
+    if not session.get('user_id'):
+        return redirect('/login')
+    user_id = session['user_id']
+
+    try:
+        profile = UserService.get_profile(user_id)
+        return render_template('settings.html', profile=profile, logined=True,
+                               username_regex=USERNAME_REGEX)
+    except Exception as e:
+        return render_template('error.html', error=str(e), logined=True)
+
+
+@blueprint.route('/settings', methods=['POST'])
+def settings_post():
+    if not session.get('user_id'):
+        return redirect('/login')
+    user_id = session['user_id']
+
+    profile = UserService.get_profile(user_id)
+    username = request.form.get('username', '')
+    bio = request.form.get('bio', '')
+
+    try:
+        UserService.update_profile(user_id, username, bio)
+        return redirect('/profile')
+    except Exception as e:
+        return render_template('settings.html', error=str(e), logined=True,
+                               profile=profile, username_regex=USERNAME_REGEX)
+
+
 @blueprint.route('/follow/<int:target_user_id>', methods=['POST'])
 def follow(target_user_id: int):
     if not session.get('user_id'):
