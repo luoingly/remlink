@@ -10,8 +10,6 @@ USERNAME_REGEX = r'^[a-zA-Z0-9_]{4,20}$'
 PASSWORD_REGEX = \
     r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$'
 
-PAGE_SIZE = 10
-
 
 class UserService:
 
@@ -280,11 +278,10 @@ class PostService:
 
     @staticmethod
     def get_posts(viewer_user_id: int | None = None,
-                  target_user_id: int | None = None,
-                  offset: int = 0, limit: int = PAGE_SIZE) -> list[Post]:
+                  target_user_id: int | None = None) -> list[Post]:
         connection = get_connection()
-        query = "CALL get_visible_posts(%s, %s, %s, %s);"
-        params = (viewer_user_id, target_user_id, offset, limit)
+        query = "CALL get_visible_posts(%s, %s);"
+        params = (viewer_user_id, target_user_id)
 
         try:
             with connection.cursor(DictCursor) as cursor:

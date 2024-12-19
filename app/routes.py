@@ -1,6 +1,6 @@
 from flask import Blueprint, request, session, render_template, redirect
 
-from .services import USERNAME_REGEX, PASSWORD_REGEX, PAGE_SIZE
+from .services import USERNAME_REGEX, PASSWORD_REGEX
 from .services import UserService, PostService
 
 
@@ -10,17 +10,15 @@ blueprint = Blueprint('main', __name__)
 @blueprint.route('/')
 def index():
     viewer_user_id = session.get('user_id', None)
-    page = request.args.get('page', 1)
     logined = viewer_user_id is not None
 
     try:
-        posts = PostService.get_posts(
-            viewer_user_id, None, PAGE_SIZE * (page - 1))
+        posts = PostService.get_posts(viewer_user_id)
         return render_template(
-            'index.html', posts=posts, page=page, logined=logined)
+            'index.html', posts=posts, logined=logined)
     except Exception as e:
         return render_template(
-            'index.html', error=str(e), posts=[], page=page, logined=logined)
+            'index.html', error=str(e), posts=[], logined=logined)
 
 
 @blueprint.route('/register', methods=['GET'])
@@ -137,13 +135,11 @@ def profile_redirect():
 @blueprint.route('/profile/<int:target_user_id>')
 def profile(target_user_id: int):
     viewer_user_id = session.get('user_id', None)
-    page = request.args.get('page', 1)
     logined = viewer_user_id is not None
 
     try:
         profile = UserService.get_profile(target_user_id)
-        posts = PostService.get_posts(
-            viewer_user_id, target_user_id, PAGE_SIZE * (page - 1))
+        posts = PostService.get_posts(viewer_user_id, target_user_id)
         return render_template(
             'profile.html', profile=profile, posts=posts,
             logined=logined, is_me=viewer_user_id == target_user_id)

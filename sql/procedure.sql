@@ -1,8 +1,6 @@
 CREATE PROCEDURE IF NOT EXISTS get_visible_posts(
     IN viewer_id INT,
-    IN target_user_id INT,
-    IN `offset` INT,
-    IN `limit` INT
+    IN target_user_id INT
 )
 BEGIN
     SELECT p.*, 
@@ -18,8 +16,7 @@ BEGIN
         p.privacy = 'public' OR p.user_id = viewer_id
         OR (p.privacy = 'friends' AND f1.follower_id = viewer_id AND f2.followee_id = viewer_id))
     GROUP BY p.post_id
-    ORDER BY p.created_at DESC
-    LIMIT `offset`, `limit`;
+    ORDER BY p.created_at DESC;
 END;
 
 
