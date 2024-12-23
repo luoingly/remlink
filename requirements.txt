@@ -1,0 +1,6 @@
+requests==2.32.3
+bcrypt==4.1.2
+PyMySQL==1.1.0
+Flask==3.0.3
+DBUtils==3.1.0
+python-dotenv==1.0.1
