@@ -1,0 +1,35 @@
+services:
+
+  remlink:
+    build: .
+    container_name: remlink
+    restart: unless-stopped
+    environment:
+      DB_HOST: remdb
+      DB_USER: root
+      DB_PASSWORD: 
+      DB_DATABASE: remlink
+      TIMEZONE: 8
+    ports:
+      - 5000:5000
+    depends_on:
+      - remdb
+
+  remdb:
+    image: mariadb:11.0.3
+    container_name: remdb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 
+      MYSQL_DATABASE: remlink
+
+  remadminer:
+    image: adminer:4.8.1
+    container_name: remadminer
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: remdb
+    ports:
+      - 8080:8080
+    depends_on:
+      - remdb
